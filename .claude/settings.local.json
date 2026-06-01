@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(node --version)",
+      "PowerShell(Get-ChildItem C:\\\\temp-portfolio -Force | Where-Object { $_.Name -ne '.git' } | ForEach-Object { Copy-Item $_.FullName -Destination C:\\\\Portfolio -Recurse -Force })"
+    ]
+  }
+}
