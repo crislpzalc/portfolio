@@ -1,14 +1,40 @@
 "use client";
 
+import { useRef } from "react";
+import {
+  motion,
+  useMotionValue,
+  useMotionTemplate,
+} from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
-import { motion } from "framer-motion";
 import FadeInView from "@/components/animated/FadeInView";
-import { projects } from "@/data/projects";
+import { projects, type Project } from "@/data/projects";
+
+const accentColors: Record<string, { glow: string; border: string }> = {
+  SpineUp: {
+    glow: "rgba(232,180,188,0.15)",
+    border: "rgba(232,180,188,0.4)",
+  },
+  "EEG Seizure Detection": {
+    glow: "rgba(200,182,226,0.15)",
+    border: "rgba(200,182,226,0.4)",
+  },
+  "Multi-label Chest X-ray Classification": {
+    glow: "rgba(168,197,160,0.15)",
+    border: "rgba(168,197,160,0.4)",
+  },
+  "Pneumonia Detection": {
+    glow: "rgba(244,199,171,0.15)",
+    border: "rgba(244,199,171,0.4)",
+  },
+};
 
 export default function Projects() {
   return (
-    <section id="work" className="px-6 py-24">
-      <div className="mx-auto max-w-4xl">
+    <section id="work" className="relative px-6 py-24">
+      <div className="pointer-events-none absolute left-0 top-1/4 h-96 w-96 rounded-full bg-accent-peach/[0.05] blur-[120px]" />
+
+      <div className="relative mx-auto max-w-4xl">
         <FadeInView>
           <h2 className="mb-16 font-serif text-3xl tracking-tight text-foreground md:text-4xl">
             Selected Work
@@ -18,7 +44,7 @@ export default function Projects() {
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           {projects.map((project, i) => (
             <FadeInView key={project.title} delay={i * 0.1}>
-              <ProjectCard project={typeof project === "object" ? project : project} />
+              <GlowCard project={project} index={i} />
             </FadeInView>
           ))}
         </div>
@@ -27,68 +53,114 @@ export default function Projects() {
   );
 }
 
-function ProjectCard({
-  project,
-}: {
-  project: (typeof projects)[number];
-}) {
-  const Wrapper = project.link ? motion.a : motion.div;
-  const wrapperProps = project.link
-    ? {
-        href: project.link,
-        target: "_blank" as const,
-        rel: "noopener noreferrer",
-      }
-    : {};
+function GlowCard({ project, index }: { project: Project; index: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const mouseX = useMotionValue(200);
+  const mouseY = useMotionValue(200);
+
+  const colors = accentColors[project.title] || accentColors.SpineUp;
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    const rect = ref.current?.getBoundingClientRect();
+    if (!rect) return;
+    mouseX.set(e.clientX - rect.left);
+    mouseY.set(e.clientY - rect.top);
+  };
+
+  const handleMouseLeave = () => {
+    mouseX.set(200);
+    mouseY.set(200);
+  };
+
+  const glowBg = useMotionTemplate`radial-gradient(350px circle at ${mouseX}px ${mouseY}px, ${colors.glow}, transparent 80%)`;
+  const borderGlow = useMotionTemplate`radial-gradient(350px circle at ${mouseX}px ${mouseY}px, ${colors.border}, transparent 80%)`;
 
   return (
-    <Wrapper
-      {...wrapperProps}
-      className="group flex h-full flex-col rounded-2xl border border-border bg-accent-rose/[0.04] p-6 transition-shadow duration-300 hover:shadow-lg hover:shadow-accent-rose/10"
-      whileHover={{ y: -4 }}
+    <motion.div
+      ref={ref}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className="group relative h-full"
+      whileHover={{ y: -8 }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
     >
-      <div className="mb-3 flex items-start justify-between">
-        <h3 className="font-serif text-xl text-foreground">{project.title}</h3>
-        <span className="shrink-0 pl-3 font-sans text-xs text-foreground-muted">
-          {project.year}
-        </span>
-      </div>
+      <motion.div
+        className="pointer-events-none absolute -inset-px rounded-2xl opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+        style={{ background: borderGlow }}
+      />
 
-      <p className="mb-4 font-sans text-sm font-medium text-foreground-muted">
-        {project.subtitle}
-      </p>
+      <div className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-background">
+        <motion.div
+          className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+          style={{ background: glowBg }}
+        />
 
-      <p className="mb-5 font-sans text-sm leading-relaxed text-foreground-muted/80">
-        {project.description}
-      </p>
+        <div className="relative flex h-full flex-col p-6">
+          <div className="mb-3 flex items-start justify-between">
+            <h3 className="font-serif text-xl text-foreground">
+              {project.title}
+            </h3>
+            <span className="shrink-0 pl-3 font-sans text-xs text-foreground-muted">
+              {project.year}
+            </span>
+          </div>
 
-      <div className="mb-4">
-        <span className="inline-block rounded-full bg-accent-lavender/20 px-3 py-1 font-sans text-xs font-medium text-foreground">
-          {project.highlight}
-        </span>
-      </div>
+          <p className="mb-4 font-sans text-sm font-medium text-foreground-muted">
+            {project.subtitle}
+          </p>
 
-      <div className="mt-auto flex flex-wrap gap-1.5">
-        {project.stack.map((tech) => (
-          <span
-            key={tech}
-            className="rounded-full border border-border px-2.5 py-0.5 font-sans text-[11px] text-foreground-muted"
+          <p className="mb-5 font-sans text-sm leading-relaxed text-foreground-muted/80">
+            {project.description}
+          </p>
+
+          <motion.div
+            className="mb-4"
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{
+              delay: 0.2 + index * 0.1,
+              type: "spring",
+              stiffness: 300,
+              damping: 15,
+            }}
           >
-            {tech}
-          </span>
-        ))}
-      </div>
+            <span className="inline-block rounded-full bg-accent-lavender/20 px-3 py-1 font-sans text-xs font-medium text-foreground">
+              {project.highlight}
+            </span>
+          </motion.div>
 
-      {project.link && (
-        <div className="mt-4 flex items-center gap-1 font-sans text-xs text-foreground-muted transition-colors group-hover:text-foreground">
-          <span>View project</span>
-          <ArrowUpRight
-            size={14}
-            className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-          />
+          <div className="mt-auto flex flex-wrap gap-1.5">
+            {project.stack.map((tech, techIndex) => (
+              <motion.span
+                key={tech}
+                className="rounded-full border border-border px-2.5 py-0.5 font-sans text-[11px] text-foreground-muted"
+                initial={{ opacity: 0, y: 8 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.4 + techIndex * 0.04 }}
+              >
+                {tech}
+              </motion.span>
+            ))}
+          </div>
+
+          {project.link && (
+            <a
+              href={project.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 flex items-center gap-1 font-sans text-xs text-foreground-muted transition-colors group-hover:text-foreground"
+            >
+              <span>View project</span>
+              <ArrowUpRight
+                size={14}
+                className="transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
+              />
+            </a>
+          )}
         </div>
-      )}
-    </Wrapper>
+      </div>
+    </motion.div>
   );
 }

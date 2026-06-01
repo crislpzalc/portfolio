@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { Mail } from "lucide-react";
 import FadeInView from "@/components/animated/FadeInView";
 import KaggleIcon from "@/components/ui/KaggleIcon";
@@ -34,10 +35,30 @@ function GitHubIcon({ size = 22 }: { size?: number }) {
   );
 }
 
+const socialLinks = [
+  {
+    href: "https://www.linkedin.com/in/cristina-lopez-alcazar",
+    label: "LinkedIn",
+    Icon: LinkedInIcon,
+  },
+  {
+    href: "https://github.com/crislpzalc",
+    label: "GitHub",
+    Icon: GitHubIcon,
+  },
+  {
+    href: "https://www.kaggle.com/cristinalopezalcazar",
+    label: "Kaggle",
+    Icon: KaggleIcon,
+  },
+];
+
 export default function Contact() {
   return (
-    <section id="contact" className="px-6 py-24">
-      <div className="mx-auto max-w-3xl text-center">
+    <section id="contact" className="relative px-6 py-24">
+      <div className="pointer-events-none absolute left-1/2 top-1/2 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent-peach/[0.06] blur-[120px]" />
+
+      <div className="relative mx-auto max-w-3xl text-center">
         <FadeInView>
           <h2 className="mb-10 font-serif text-3xl tracking-tight text-foreground md:text-4xl">
             Get in Touch
@@ -47,53 +68,51 @@ export default function Contact() {
         <FadeInView delay={0.1}>
           <a
             href="mailto:crislopezalc@gmail.com"
-            className="inline-flex items-center gap-2 font-serif text-2xl text-foreground transition-colors hover:text-accent-rose md:text-3xl"
+            className="group inline-flex items-center gap-2 font-serif text-2xl text-foreground md:text-3xl"
           >
-            <Mail size={24} className="text-foreground-muted" />
-            crislopezalc@gmail.com
+            <Mail
+              size={24}
+              className="text-foreground-muted transition-colors group-hover:text-accent-rose"
+            />
+            <span className="relative">
+              crislopezalc@gmail.com
+              <span className="absolute -bottom-1 left-0 h-[2px] w-0 rounded-full bg-accent-rose transition-all duration-500 group-hover:w-full" />
+            </span>
           </a>
         </FadeInView>
 
         <FadeInView delay={0.2}>
           <div className="mt-10 flex items-center justify-center gap-6">
-            <a
-              href="https://www.linkedin.com/in/cristina-lopez-alcazar"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-foreground-muted transition-colors hover:text-accent-rose"
-              aria-label="LinkedIn"
-            >
-              <LinkedInIcon size={22} />
-            </a>
-            <a
-              href="https://github.com/crislpzalc"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-foreground-muted transition-colors hover:text-accent-rose"
-              aria-label="GitHub"
-            >
-              <GitHubIcon size={22} />
-            </a>
-            <a
-              href="https://www.kaggle.com/cristinalopezalcazar"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-foreground-muted transition-colors hover:text-accent-rose"
-              aria-label="Kaggle"
-            >
-              <KaggleIcon size={22} />
-            </a>
+            {socialLinks.map(({ href, label, Icon }) => (
+              <motion.a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-foreground-muted transition-colors hover:text-accent-rose"
+                aria-label={label}
+                whileHover={{ scale: 1.25, rotate: 5 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: "spring", stiffness: 400, damping: 15 }}
+              >
+                <Icon size={22} />
+              </motion.a>
+            ))}
           </div>
         </FadeInView>
 
         <FadeInView delay={0.3}>
-          <a
+          <motion.a
             href="/CV_Cristina_Lopez_Alcazar.pdf"
             download
-            className="mt-12 inline-block rounded-full bg-accent-peach px-8 py-3 font-sans text-sm text-foreground transition-all hover:shadow-md"
+            className="group relative mt-12 inline-block overflow-hidden rounded-full bg-accent-peach px-8 py-3 font-sans text-sm text-foreground transition-shadow hover:shadow-lg hover:shadow-accent-peach/25"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.98 }}
+            transition={{ type: "spring", stiffness: 400, damping: 20 }}
           >
             Download CV
-          </a>
+            <span className="pointer-events-none absolute inset-0 -translate-x-full rotate-[30deg] bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+          </motion.a>
         </FadeInView>
       </div>
     </section>
