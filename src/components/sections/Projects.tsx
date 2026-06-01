@@ -1,31 +1,35 @@
 "use client";
 
 import { useRef } from "react";
-import {
-  motion,
-  useMotionValue,
-  useMotionTemplate,
-} from "framer-motion";
+import { motion, useMotionValue, useMotionTemplate } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import FadeInView from "@/components/animated/FadeInView";
 import { projects, type Project } from "@/data/projects";
 
-const accentColors: Record<string, { glow: string; border: string }> = {
+const cardStyles: Record<
+  string,
+  { glow: string; border: string; gradient: string }
+> = {
   SpineUp: {
     glow: "rgba(232,180,188,0.15)",
     border: "rgba(232,180,188,0.4)",
+    gradient: "from-accent-rose/20 via-accent-rose/8 to-accent-lavender/5",
   },
   "EEG Seizure Detection": {
     glow: "rgba(200,182,226,0.15)",
     border: "rgba(200,182,226,0.4)",
+    gradient:
+      "from-accent-lavender/20 via-accent-lavender/8 to-accent-rose/5",
   },
   "Multi-label Chest X-ray Classification": {
     glow: "rgba(168,197,160,0.15)",
     border: "rgba(168,197,160,0.4)",
+    gradient: "from-accent-sage/20 via-accent-sage/8 to-accent-lavender/5",
   },
   "Pneumonia Detection": {
     glow: "rgba(244,199,171,0.15)",
     border: "rgba(244,199,171,0.4)",
+    gradient: "from-accent-peach/20 via-accent-peach/8 to-accent-rose/5",
   },
 };
 
@@ -58,7 +62,7 @@ function GlowCard({ project, index }: { project: Project; index: number }) {
   const mouseX = useMotionValue(200);
   const mouseY = useMotionValue(200);
 
-  const colors = accentColors[project.title] || accentColors.SpineUp;
+  const styles = cardStyles[project.title] || cardStyles.SpineUp;
 
   const handleMouseMove = (e: React.MouseEvent) => {
     const rect = ref.current?.getBoundingClientRect();
@@ -72,8 +76,8 @@ function GlowCard({ project, index }: { project: Project; index: number }) {
     mouseY.set(200);
   };
 
-  const glowBg = useMotionTemplate`radial-gradient(350px circle at ${mouseX}px ${mouseY}px, ${colors.glow}, transparent 80%)`;
-  const borderGlow = useMotionTemplate`radial-gradient(350px circle at ${mouseX}px ${mouseY}px, ${colors.border}, transparent 80%)`;
+  const glowBg = useMotionTemplate`radial-gradient(350px circle at ${mouseX}px ${mouseY}px, ${styles.glow}, transparent 80%)`;
+  const borderGlow = useMotionTemplate`radial-gradient(350px circle at ${mouseX}px ${mouseY}px, ${styles.border}, transparent 80%)`;
 
   return (
     <motion.div
@@ -94,6 +98,19 @@ function GlowCard({ project, index }: { project: Project; index: number }) {
           className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
           style={{ background: glowBg }}
         />
+
+        <div
+          className={`relative h-20 overflow-hidden bg-gradient-to-br ${styles.gradient}`}
+        >
+          <span className="absolute -right-2 -top-3 select-none font-serif text-8xl leading-none text-foreground/[0.04]">
+            {String(index + 1).padStart(2, "0")}
+          </span>
+          {project.featured && (
+            <span className="absolute left-4 top-4 rounded-full bg-accent-rose/20 px-3 py-1 font-sans text-[10px] font-medium text-foreground-muted backdrop-blur-sm">
+              Featured
+            </span>
+          )}
+        </div>
 
         <div className="relative flex h-full flex-col p-6">
           <div className="mb-3 flex items-start justify-between">

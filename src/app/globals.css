@@ -36,3 +36,12 @@ body {
     box-shadow: 0 0 12px 4px var(--dot-color, rgba(232, 180, 188, 0.15));
   }
 }
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}

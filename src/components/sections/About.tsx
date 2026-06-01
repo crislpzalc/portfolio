@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { motion, useInView } from "framer-motion";
 import { ReactNode } from "react";
 
 function Highlight({ children }: { children: ReactNode }) {
@@ -18,6 +19,41 @@ function Highlight({ children }: { children: ReactNode }) {
     </span>
   );
 }
+
+function Counter({
+  target,
+  decimals = 0,
+  duration = 1500,
+}: {
+  target: number;
+  decimals?: number;
+  duration?: number;
+}) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true });
+  const [display, setDisplay] = useState("0");
+
+  useEffect(() => {
+    if (!inView) return;
+    const start = performance.now();
+    const animate = (now: number) => {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setDisplay((target * eased).toFixed(decimals));
+      if (progress < 1) requestAnimationFrame(animate);
+    };
+    requestAnimationFrame(animate);
+  }, [inView, target, decimals, duration]);
+
+  return <span ref={ref}>{display}</span>;
+}
+
+const stats = [
+  { value: 8.61, decimals: 2, label: "UC3M GPA", suffix: "/10" },
+  { value: 3.88, decimals: 2, label: "Texas A&M GPA", suffix: "/4.0" },
+  { value: 100, decimals: 0, label: "TOEFL iBT", suffix: "/120" },
+  { value: 5, decimals: 0, label: "High Honor Distinctions", suffix: "" },
+];
 
 const paragraphs: ReactNode[] = [
   <>
@@ -48,7 +84,7 @@ export default function About() {
     <section id="about" className="relative px-6 py-24">
       <div className="pointer-events-none absolute right-0 top-1/3 h-80 w-80 rounded-full bg-accent-lavender/[0.06] blur-[100px]" />
 
-      <div className="relative mx-auto max-w-xl">
+      <div className="relative mx-auto max-w-2xl">
         <motion.h2
           className="mb-12 font-serif text-3xl tracking-tight text-foreground md:text-4xl"
           initial={{ opacity: 0, y: 20 }}
@@ -76,6 +112,32 @@ export default function About() {
             </motion.p>
           ))}
         </div>
+
+        <motion.div
+          className="mt-16 grid grid-cols-2 gap-8 border-t border-border/50 pt-12 md:grid-cols-4"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
+          {stats.map((stat) => (
+            <div key={stat.label} className="text-center">
+              <div className="font-serif text-3xl text-foreground md:text-4xl">
+                <Counter
+                  target={stat.value}
+                  decimals={stat.decimals}
+                  duration={1800}
+                />
+                <span className="text-xl text-foreground-muted">
+                  {stat.suffix}
+                </span>
+              </div>
+              <p className="mt-2 font-sans text-xs text-foreground-muted">
+                {stat.label}
+              </p>
+            </div>
+          ))}
+        </motion.div>
       </div>
     </section>
   );
