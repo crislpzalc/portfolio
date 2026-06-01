@@ -52,15 +52,16 @@ const stats = [
   { value: 8.61, decimals: 2, label: "UC3M GPA", suffix: "/10" },
   { value: 3.88, decimals: 2, label: "Texas A&M GPA", suffix: "/4.0" },
   { value: 100, decimals: 0, label: "TOEFL iBT", suffix: "/120" },
-  { value: 5, decimals: 0, label: "High Honor Distinctions", suffix: "" },
+  { value: 7, decimals: 0, label: "High Honor Distinctions", suffix: "" },
 ];
 
 const paragraphs: ReactNode[] = [
   <>
-    I&apos;m a final-year Computer Science and Business Administration student
-    at <Highlight>Universidad Carlos III de Madrid</Highlight>, focused on
-    applying <Highlight>machine learning</Highlight> to real-world healthcare
-    problems.
+    I&apos;m completing my Double Degree in Computer Science and Business
+    Administration at <Highlight>Universidad Carlos III de Madrid</Highlight>,
+    with all coursework finished and only final thesis projects remaining.
+    Focused on applying <Highlight>machine learning</Highlight> to real-world
+    healthcare problems.
   </>,
   <>
     This summer I&apos;ll join <Highlight>Institut Pasteur</Highlight> as an{" "}
@@ -69,7 +70,7 @@ const paragraphs: ReactNode[] = [
   </>,
   <>
     Previously, my team&apos;s project SpineUp won the{" "}
-    <Highlight>1st Prize at the C4DX 2026 Challenge</Highlight> — a smart
+    <Highlight>1st Prize at the C4DX 2026 Challenge</Highlight>, a smart
     textile system to prevent musculoskeletal disorders in office settings.
   </>,
   <>

@@ -16,11 +16,11 @@ const instrumentSerif = Instrument_Serif({
 });
 
 export const metadata: Metadata = {
-  title: "Cristina López Alcázar — AI for Healthcare",
+  title: "Cristina López Alcázar | AI for Healthcare",
   description:
     "Portfolio of Cristina López Alcázar. Computer Science & Business student at UC3M, focused on applying machine learning to real-world healthcare problems.",
   openGraph: {
-    title: "Cristina López Alcázar — AI for Healthcare",
+    title: "Cristina López Alcázar | AI for Healthcare",
     description:
       "Computer Science & Business student at UC3M. Building reproducible ML for clinical impact.",
     type: "website",

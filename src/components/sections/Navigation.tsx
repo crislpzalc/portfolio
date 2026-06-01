@@ -7,6 +7,7 @@ const links = [
   { id: "about", label: "About" },
   { id: "work", label: "Work" },
   { id: "experience", label: "Experience" },
+  { id: "awards", label: "Awards" },
   { id: "contact", label: "Contact" },
 ];
 
@@ -18,7 +19,7 @@ export default function Navigation() {
     const onScroll = () => {
       setVisible(window.scrollY > 100);
 
-      const ids = ["contact", "experience", "work", "about"];
+      const ids = ["contact", "awards", "experience", "work", "about"];
       for (const id of ids) {
         const el = document.getElementById(id);
         if (el && el.getBoundingClientRect().top <= 150) {

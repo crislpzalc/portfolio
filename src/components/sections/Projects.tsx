@@ -1,9 +1,10 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { motion, useMotionValue, useMotionTemplate } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import FadeInView from "@/components/animated/FadeInView";
+import ProjectModal from "@/components/sections/ProjectModal";
 import { projects, type Project } from "@/data/projects";
 
 const cardStyles: Record<
@@ -34,6 +35,8 @@ const cardStyles: Record<
 };
 
 export default function Projects() {
+  const [selected, setSelected] = useState<Project | null>(null);
+
   return (
     <section id="work" className="relative px-6 py-24">
       <div className="pointer-events-none absolute left-0 top-1/4 h-96 w-96 rounded-full bg-accent-peach/[0.05] blur-[120px]" />
@@ -48,16 +51,30 @@ export default function Projects() {
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           {projects.map((project, i) => (
             <FadeInView key={project.title} delay={i * 0.1}>
-              <GlowCard project={project} index={i} />
+              <GlowCard
+                project={project}
+                index={i}
+                onClick={() => setSelected(project)}
+              />
             </FadeInView>
           ))}
         </div>
       </div>
+
+      <ProjectModal project={selected} onClose={() => setSelected(null)} />
     </section>
   );
 }
 
-function GlowCard({ project, index }: { project: Project; index: number }) {
+function GlowCard({
+  project,
+  index,
+  onClick,
+}: {
+  project: Project;
+  index: number;
+  onClick: () => void;
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const mouseX = useMotionValue(200);
   const mouseY = useMotionValue(200);
@@ -84,7 +101,8 @@ function GlowCard({ project, index }: { project: Project; index: number }) {
       ref={ref}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="group relative h-full"
+      onClick={onClick}
+      className="group relative h-full cursor-pointer"
       whileHover={{ y: -8 }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
     >
@@ -162,20 +180,13 @@ function GlowCard({ project, index }: { project: Project; index: number }) {
             ))}
           </div>
 
-          {project.link && (
-            <a
-              href={project.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-4 flex items-center gap-1 font-sans text-xs text-foreground-muted transition-colors group-hover:text-foreground"
-            >
-              <span>View project</span>
-              <ArrowUpRight
-                size={14}
-                className="transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
-              />
-            </a>
-          )}
+          <span className="mt-4 flex items-center gap-1 font-sans text-xs text-foreground-muted transition-colors group-hover:text-foreground">
+            <span>View details</span>
+            <ArrowUpRight
+              size={14}
+              className="transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
+            />
+          </span>
         </div>
       </div>
     </motion.div>

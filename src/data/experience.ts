@@ -10,7 +10,7 @@ export interface TimelineEntry {
 export const timeline: TimelineEntry[] = [
   {
     institution: "Institut Pasteur",
-    role: "Amgen Scholar — Deep Learning Research Intern (Incoming)",
+    role: "Amgen Scholar, Deep Learning Research Intern (Incoming)",
     location: "Paris, France",
     dates: "Jul 2026 – Sep 2026",
     description:
@@ -23,7 +23,7 @@ export const timeline: TimelineEntry[] = [
     location: "Madrid, Spain",
     dates: "Sep 2021 – Jun 2026",
     description:
-      "Grade: 8.61/10 · High Honor Distinctions in 5 subjects. Coursework in AI, ML, Neural Networks, Distributed Systems, IoT, Software Engineering.",
+      "Grade: 8.61/10 · 7 High Honor Distinctions. All coursework completed; only final thesis projects (TFGs) remain. Focus areas: AI, ML, Neural Networks, Distributed Systems, IoT, Software Engineering.",
     type: "education",
   },
   {
