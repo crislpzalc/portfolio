@@ -93,7 +93,7 @@ function SceneContent({
     <>
       <SceneLighting />
       <Desk />
-      <DeskObjects />
+      <DeskObjects zooming={zooming} />
 
       <group position={[0.2, 1.5, -0.2]}>
         <Microscope3D

@@ -6,8 +6,8 @@ Personal portfolio built as an immersive 3D experience. A rose-gold desk scene i
 
 - **Next.js 16** — App Router, static export, TypeScript
 - **React Three Fiber** — 3D desk scene with procedural geometry (no GLTF)
-- **@react-three/drei** — OrbitControls, ContactShadows, Environment
-- **Framer Motion** — page transitions, AnimatePresence, spring animations
+- **@react-three/drei** — OrbitControls, ContactShadows, Text3D
+- **Framer Motion** — page transitions, AnimatePresence
 - **Tailwind CSS v4** — `@theme` directive, custom design tokens
 
 ## Project Structure
@@ -15,23 +15,21 @@ Personal portfolio built as an immersive 3D experience. A rose-gold desk scene i
 ```
 src/
 ├── app/
-│   ├── globals.css         # Theme tokens, scrollbar, keyframes
-│   ├── icon.svg            # Favicon
-│   ├── layout.tsx          # Root layout, Google Fonts
-│   └── page.tsx            # Phase orchestrator (desk → transition → microscope)
+│   ├── globals.css              # Theme tokens, scrollbar styles
+│   ├── icon.svg                 # Favicon
+│   ├── layout.tsx               # Root layout, Google Fonts, metadata
+│   └── page.tsx                 # Phase orchestrator (desk → transition → microscope)
 ├── components/
 │   ├── microscope/
-│   │   └── MicroscopeWorld.tsx   # Content world (WIP)
+│   │   └── MicroscopeWorld.tsx  # Content world shell
 │   └── scene/
-│       ├── Desk.tsx              # Wood desk geometry
-│       ├── DeskObjects.tsx       # Laptop, notebook, books, mug, pencil cup
-│       ├── DeskScene.tsx         # Canvas + camera zoom animation
-│       ├── Microscope3D.tsx      # Procedural microscope (rose-gold metals)
-│       └── SceneLighting.tsx     # Pink-tinted three-point lighting
-├── data/
-│   └── portfolio.ts        # All content data (projects, education, awards, skills)
-└── lib/
-    └── utils.ts             # Shared utilities
+│       ├── Desk.tsx             # Wood desk surface
+│       ├── DeskObjects.tsx      # Laptop, headphones, notebooks, 3D university text
+│       ├── DeskScene.tsx        # Canvas wrapper, camera zoom animation
+│       ├── Microscope3D.tsx     # Procedural microscope with hover glow
+│       └── SceneLighting.tsx    # Three-point lighting setup
+└── data/
+    └── portfolio.ts             # Projects, education, awards, skills, experience
 ```
 
 ## Getting Started
@@ -45,20 +43,24 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## How It Works
 
-1. **Desk phase** — A 3D scene renders a study desk with a microscope. OrbitControls let the user drag to explore. The microscope glows on hover.
-2. **Zoom transition** — Clicking the microscope animates the camera toward the eyepiece (easeInOutCubic, ~1.8s), FOV narrows 40→25, a radial-gradient lens overlay fades in.
-3. **Microscope world** — Content appears inside the microscope view. Press Escape or click "Back to desk" to return.
+1. **Desk phase** — A 3D scene renders a study desk with a microscope, laptop, headphones, and university decorations. OrbitControls let the user drag to explore. The microscope glows on hover.
+2. **Zoom transition** — Clicking the microscope animates the camera toward the eyepiece while a radial-gradient lens overlay fades in.
+3. **Microscope world** — Content appears inside the microscope view. Press Escape or click the back arrow to return.
 
-## Deployment
-
-Optimized for Vercel. Push to main and it deploys automatically.
+## Build & Deploy
 
 ```bash
-npm run build   # static pages generated to .next/
+npm run build
 ```
+
+Static pages are generated to `.next/`. Optimized for Vercel — push to main for automatic deployment.
 
 ## Design
 
-- **Palette**: warm beige background (#f5ede8), rose-gold metals, lavender glass accents, dusty-rose accessories
-- **Fonts**: Instrument Serif (headings), Inter (body), JetBrains Mono (code)
-- **Aesthetic**: soft, feminine, scientific — a confocal-microscopy metaphor
+- **Palette:** warm beige background, rose-gold metals, lavender glass accents
+- **Fonts:** Instrument Serif (headings), Inter (body), JetBrains Mono (code)
+- **Aesthetic:** soft, scientific — a confocal-microscopy metaphor
+
+## License
+
+All rights reserved.

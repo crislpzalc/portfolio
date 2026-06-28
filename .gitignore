@@ -11,9 +11,12 @@
 # misc
 .DS_Store
 *.pem
+Thumbs.db
 
 # debug
 npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
 # env
 .env*.local
@@ -24,3 +27,7 @@ npm-debug.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# claude code
+.claude/settings.local.json
+.claude

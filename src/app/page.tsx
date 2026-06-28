@@ -121,15 +121,6 @@ export default function Home() {
           </p>
         </motion.div>
 
-        {/* Subtle instruction — bottom right */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: loaded && !zooming ? 1 : 0 }}
-          transition={{ delay: zooming ? 0 : 2, duration: zooming ? 0.3 : 1 }}
-          className="absolute bottom-8 right-8 z-20 text-xs text-[#a09090]/60 tracking-wider pointer-events-none"
-        >
-          Drag to explore &middot; Click the microscope to enter
-        </motion.p>
       </div>
 
       {/* Lens overlay — fades in as camera zooms toward eyepiece, fades out when content appears */}

@@ -3,9 +3,13 @@
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
-import { Text3D, Center } from "@react-three/drei";
+import { Text3D, Center, Html } from "@react-three/drei";
 
-export default function DeskObjects() {
+interface DeskObjectsProps {
+  zooming?: boolean;
+}
+
+export default function DeskObjects({ zooming = false }: DeskObjectsProps) {
   const screenRef = useRef<THREE.Mesh>(null);
 
   // Subtle screen flicker animation
@@ -175,7 +179,7 @@ export default function DeskObjects() {
       {/* =============================================== */}
       {/* LAPTOP — left side of desk                      */}
       {/* =============================================== */}
-      <group position={[-1.8, 0.02, 0.3]} rotation={[0, 0.15, 0]}>
+      <group position={[-1.7, 0.02, 0.3]} rotation={[0, 0.15, 0]}>
         {/* Laptop base */}
         <mesh material={silverMetal} castShadow receiveShadow>
           <boxGeometry args={[1.5, 0.05, 1.0]} />
@@ -191,7 +195,7 @@ export default function DeskObjects() {
           <meshStandardMaterial color="#c8b8b0" roughness={0.3} metalness={0.4} />
         </mesh>
         {/* Screen (angled ~110 degrees from base = 20 deg back from vertical) */}
-        <group position={[0, 0.025, -0.5]} rotation={[-1.22, 0, 0]}>
+        <group position={[0, 0.2, -0.7]} rotation={[-0.8, 0, 0]}>
           {/* Screen back (silver) */}
           <mesh material={silverMetal} castShadow>
             <boxGeometry args={[1.5, 1.0, 0.03]} />
@@ -207,26 +211,45 @@ export default function DeskObjects() {
               roughness={0.3}
             />
           </mesh>
-          {/* Subtle "code lines" on screen */}
-          {[0.3, 0.2, 0.1, 0.0, -0.1, -0.2, -0.3].map((y, i) => (
-            <mesh key={`line-${i}`} position={[-0.15 + (i % 3) * 0.08, y, 0.025]}>
-              <boxGeometry args={[0.4 + (i % 2) * 0.2, 0.015, 0.001]} />
-              <meshStandardMaterial
-                color="#3a2a4a"
-                emissive="#3a2a5a"
-                emissiveIntensity={0.08}
-                transparent
-                opacity={0.4}
-              />
-            </mesh>
-          ))}
+          {/* Screen hint text */}
+          <Html
+            transform
+            position={[0, 0.05, 0.03]}
+            distanceFactor={1.2}
+            style={{
+              opacity: zooming ? 0 : 1,
+              transition: "opacity 0.4s ease",
+              pointerEvents: "none",
+              userSelect: "none",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: "6px",
+                fontFamily: "'JetBrains Mono', monospace",
+                color: "rgba(200, 182, 226, 0.85)",
+                textAlign: "center",
+                whiteSpace: "nowrap",
+              }}
+            >
+              <p style={{ fontSize: "31px", letterSpacing: "0.15em" }}>
+                DRAG TO EXPLORE
+              </p>
+              <p style={{ fontSize: "29px", letterSpacing: "0.1em", color: "rgba(232, 180, 188, 0.75)" }}>
+                CLICK THE MICROSCOPE
+              </p>
+            </div>
+          </Html>
         </group>
       </group>
 
       {/* =============================================== */}
       {/* NOTEBOOK / JOURNAL — near center, slightly right */}
       {/* =============================================== */}
-      <group position={[0.6, 0.02, 0.6]} rotation={[0, -0.2, 0]}>
+      <group position={[1.3, 0.02, 1]} rotation={[0, -0.2, 0]}>
         {/* Back cover */}
         <mesh material={darkCover} castShadow receiveShadow>
           <boxGeometry args={[0.7, 0.04, 0.95]} />
@@ -261,7 +284,7 @@ export default function DeskObjects() {
       {/* =============================================== */}
       {/* PEN — on the notebook                           */}
       {/* =============================================== */}
-      <group position={[0.5, 0.1, 0.5]} rotation={[0, -0.5, Math.PI / 2 - 0.05]}>
+      <group position={[1.3, 0.11, 1.2]} rotation={[0, -0.5, -1.55]}>
         {/* Pen body */}
         <mesh material={penMaterial} castShadow>
           <cylinderGeometry args={[0.02, 0.02, 0.6, 8]} />
@@ -370,7 +393,7 @@ export default function DeskObjects() {
       {/* =============================================== */}
       {/* COFFEE MUG — right-front of desk                */}
       {/* =============================================== */}
-      <group position={[1.8, 0.15, 1.1]}>
+      <group position={[2.1, 0.15, 0.8]}>
         {/* Mug body */}
         <mesh material={ceramicWhite} castShadow>
           <cylinderGeometry args={[0.14, 0.12, 0.3, 20]} />
@@ -407,7 +430,7 @@ export default function DeskObjects() {
       {/* =============================================== */}
       {/* BOARDING PASS — scattered near front            */}
       {/* =============================================== */}
-      <group position={[0.2, 0.02, 1.2]} rotation={[0, 0.35, 0]}>
+      <group position={[2.2, 0.02, 1.2]} rotation={[0, 0.35, 0]}>
         <mesh material={boardingPassMaterial} castShadow receiveShadow>
           <boxGeometry args={[0.45, 0.003, 0.15]} />
         </mesh>
